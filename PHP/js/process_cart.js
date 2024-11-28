@@ -3,39 +3,6 @@ function closeModal() {
   document.getElementById("paymentModal").style.display = "none";
 }
 
-// Hàm để xác nhận thanh toán
-function confirmPayment() {
-  var name = document.getElementById("name").value.trim();
-  var phone = document.getElementById("phone").value.trim();
-  var address = document.getElementById("address").value.trim();
-
-  if (!name || !phone || !address) {
-    alert("Vui lòng điền đầy đủ thông tin.");
-    return;
-  }
-  $.ajax({
-    type: "POST",
-    url: "action/buy.php",
-    data: {
-      name: name,
-      phone: phone,
-      address: address,
-    },
-  })
-    .done(function (data) {
-      if (data === "1") {
-        alert("Mua thành công");
-        window.location.assign("?page=checkout");
-      } else {
-        alert("Đã có lỗi xảy ra trong quá trình thanh toán.");
-      }
-      closeModal();
-    })
-    .fail(function () {
-      alert("Có lỗi xảy ra khi thực hiện thanh toán.");
-    });
-}
-
 // Đóng modal khi người dùng nhấp vào nút Hủy
 document.getElementById("cancelBtn").addEventListener("click", closeModal);
 
@@ -92,22 +59,86 @@ function updateModalProducts(products) {
   productTable.empty();
 
   products.forEach(function (product) {
+    // Start building the row HTML
     var row =
       "<tr>" +
       "<td>" +
       product.title +
       "</td>" +
       "<td>" +
+      product.size.size +
+      "</td>" +
+      "<td>" +
       number_format(product.price) +
       " VND</td>" +
       "<td>" +
       product.qty +
-      "</td>" +
-      "<td>" +
-      number_format(product.total) +
-      " VND</td>" +
-      "</tr>";
+      "</td>";
+
+    // Add all the toppings into one <td> in a single column
+    var toppingsHtml = product.toppings
+      .map(function (topping) {
+        return topping.name;
+      })
+      .join("<br>"); // Join toppings names with a comma and space
+
+    row += "<td>" + toppingsHtml + "</td>"; // Add all toppings in one cell
+
+    // Add the total
+    row += "<td>" + number_format(product.total) + " VND</td>" + "</tr>";
+
+    // Append the row to the table
     productTable.append(row);
+  });
+}
+
+// Hàm để xác nhận thanh toán
+function confirmPayment() {
+  var name = document.getElementById("name").value.trim();
+  var phone = document.getElementById("phone").value.trim();
+  var address = document.getElementById("address").value.trim();
+
+  if (!name || !phone || !address) {
+    alert("Vui lòng điền đầy đủ thông tin.");
+    return;
+  }
+
+  // Fetch cart info first
+  $.ajax({
+    type: "GET",
+    url: "action/get_cart_info.php",
+    success: function (response) {
+      var data = JSON.parse(response); // Parse the cart info
+
+      console.log(data);
+
+      // Proceed with payment only after cart info is fetched
+      $.ajax({
+        type: "POST",
+        url: "action/buy.php",
+        data: {
+          name: name,
+          phone: phone,
+          address: address,
+          products: JSON.stringify(data.products), // Send products as JSON
+        },
+      })
+        .done(function (data) {
+          if (data === "1") {
+            alert("Mua thành công");
+            window.location.assign("?page=checkout");
+          } else {
+            alert("Đã có lỗi xảy ra trong quá trình thanh toán.");
+          }
+          closeModal();
+        })
+        .fail(function () {
+          alert("Có lỗi xảy ra khi thực hiện thanh toán.");
+        });
+    },
+    error: function () {
+      alert("Không thể lấy thông tin giỏ hàng.");
+    },
   });
 }
 
@@ -157,17 +188,19 @@ function delete_cart(cartKey) {
     }).done(function (data) {
       $("#box_package").html(data);
     });
-    
+
     // Ẩn sản phẩm đã xóa
     if (document.getElementById("tr" + cartKey)) {
       document.getElementById("tr" + cartKey).remove(); // Thay đổi từ hide sang remove
     }
-    
+
     // Kiểm tra nếu không còn sản phẩm nào
-    if ($('.wishlist-table tbody tr').length === 0) {
-      $('.wishlist-table').html('<div class="alert alert-success" role="alert" style="text-align:center;font-size:1.2em">Chưa có sản phẩm trong giỏ hàng</div>');
+    if ($(".wishlist-table tbody tr").length === 0) {
+      $(".wishlist-table").html(
+        '<div class="alert alert-success" role="alert" style="text-align:center;font-size:1.2em">Chưa có sản phẩm trong giỏ hàng</div>'
+      );
     }
-    
+
     updateModalCart();
   });
 }

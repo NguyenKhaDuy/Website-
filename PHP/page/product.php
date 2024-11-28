@@ -69,19 +69,19 @@ $casebook = $info['casebook'];
                                 </div>
                                 <div>
                                     <?php
-                                    $sql = "SELECT id_size, size FROM size";
+                                    $sql = "SELECT idsize, size FROM size";
                                     $result = $conn->query($sql);
                                     if ($result->num_rows > 0) {
                                         echo '<div class="size_box">';
                                         echo '<label for="size">Chọn size:</label>';
                                         while ($row = $result->fetch_assoc()) {
                                             echo '<div class="size-option">';
-                                            echo '<input type="radio" id="size' . $row["id_size"] . '" 
+                                            echo '<input type="radio" id="size' . $row["idsize"] . '" 
                                                         name="size" 
-                                                        value="' . $row["size"] . '" 
+                                                        value="' . $row["idsize"] . '" 
                                                         onchange="updatePrice(this.value)" ' .
                                                 ($row["size"] === 'S' ? 'checked' : '') . '>';
-                                            echo '<label for="size' . $row["id_size"] . '">' . $row["size"] . '</label>';
+                                            echo '<label for="size' . $row["idsize"] . '">' . $row["size"] . '</label>';
                                             echo '</div>';
                                         }
                                         echo '</div>';
@@ -110,7 +110,7 @@ $casebook = $info['casebook'];
                                                     value="' . $row["idtopping"] . '" 
                                                     data-price="' . $row["pricetopping"] . '"
                                                     data-name="' . htmlspecialchars($row["nametopping"]) . '"
-                                                    onchange="updatePrice()">';
+                                                    onchange="">';
                                             echo '<label for="topping' . $row["idtopping"] . '">'
                                                 . $row["nametopping"] . ' (+' . number_format($row["pricetopping"]) . ' VNĐ)</label>';
                                             echo '</div>';

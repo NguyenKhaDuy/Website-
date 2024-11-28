@@ -13,15 +13,18 @@ function addProductToCart(id) {
         alert("Vui lòng chọn size");
         return;
     }
-    let size = sizeElement.value;
+    let idsize = sizeElement.value;
 
     // Lấy thông tin topping
     let toppings = [];
-    let toppingNames = []; // Thêm mảng để lưu tên topping
+    let toppingNames = [];
+    // Thêm mảng để lưu tên topping
     document.querySelectorAll('input[name="topping[]"]:checked').forEach(cb => {
         toppings.push(cb.value);
         toppingNames.push(cb.getAttribute('data-name')); // Giả sử mỗi checkbox có thuộc tính data-name
     });
+
+    
 
     $.ajax({
         type: "GET",
@@ -29,7 +32,7 @@ function addProductToCart(id) {
         data: { 
             id, 
             quantity,
-            size,
+            idsize,
             toppings: JSON.stringify(toppings),
             toppingNames: JSON.stringify(toppingNames) // Gửi thêm tên của topping
         }

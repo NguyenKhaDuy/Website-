@@ -31,7 +31,7 @@ $tong = 0;
     <tbody>
         <?php while ($row = $result->fetch_assoc()) {
             $product = getProductById($row['idProduct'])->fetch_assoc();
-
+            $size = getSizeId($row['idsize'])->fetch_assoc();
             // Fetch toppings associated with the current product order
             $orderToppingsResult = getOderTopping($row['idPackage'], $row['idProduct']);
             $toppingNames = [];
@@ -42,14 +42,14 @@ $tong = 0;
                 $tongTopping += $topping['pricetopping'];
             }
 
-            $tong += $product['price'] * $row['qty'] + $tongTopping;
+            $tong += $row['price'] * $row['qty'] + $tongTopping;
         ?>
             <tr>
                 <td><?php echo $product['id'] ?></td>
                 <td><img style="width:100px;height:160px" src="../PHP/public/<?php echo $product['img'] ?>" alt=""></td>
                 <td><?php echo $product['title'] ?></td>
-                <td>S</td>
-                <td><?php echo number_format($product['price']) ?>VND</td>
+                <td><?php echo $size['size'] ?></td>
+                <td><?php echo number_format($row['price']) ?>VND</td>
                 <td><?php echo $row['qty'] ?></td>
                 <td><?php echo implode('<br>', $toppingNames); ?></td>
                 <td><?php echo $tongTopping ?></td>
@@ -64,6 +64,7 @@ $tong = 0;
             $product = getProductById($row['idProduct'])->fetch_assoc();
             $idDiscounting = $row['idDiscounting'];
             $discounting = getDiscountingById($idDiscounting)->fetch_assoc();
+            $size = getSizeId($row['idsize'])->fetch_assoc();
 
             // Fetch toppings associated with the current product order
             $orderToppingsResult = getOderTopping($row['idOrder'], $row['idProduct']);
@@ -75,19 +76,19 @@ $tong = 0;
                 $tongTopping += $topping['pricetopping'];
             }
 
-            $tong += $product['price'] * $row['qty'] + $tongTopping;
+            $tong += $row['price'] * $row['qty'] + $tongTopping;
 
         ?>
             <tr>
                 <td><?php echo $row['idProduct'] ?></td>
                 <td><img style="width:100px;height:160px" src="../PHP/public/<?php echo htmlspecialchars($product['img']) ?>" alt=""></td>
                 <td><?php echo htmlspecialchars($product['title']) ?></td>
-                <td>S</td>
-                <td><?php echo number_format($product['price']) ?> VND</td>
+                <td><?php echo $size['size'] ?></td>
+                <td><?php echo number_format($row['price']) ?> VND</td>
                 <td><?php echo $row['qty'] ?></td>
                 <td><?php echo implode('<br>', $toppingNames); ?></td>
                 <td><?php echo $tongTopping ?></td>
-                <td><?php echo ($product['price'] * $discounting['percent']) / 100 ?></td>
+                <td><?php echo ($row['price'] * $discounting['percent']) / 100 ?></td>
             </tr>
         <?php
         }

@@ -5,8 +5,10 @@ session_start();
 
 $id = $_GET['id'];
 $quantity = $_GET['quantity'];
-$size = isset($_GET['size']) ? $_GET['size'] : 'S';
+$idsize = $_GET['idsize'];
 $toppings = isset($_GET['toppings']) ? json_decode($_GET['toppings'], true) : [];
+$size = getSizeId($idsize)->fetch_assoc();
+
 
 // Lấy thông tin sản phẩm từ database
 $newProduct = getProductById($id)->fetch_assoc();
@@ -14,7 +16,7 @@ $newProduct = getProductById($id)->fetch_assoc();
 if ($quantity <= $newProduct['amount']) {
     // Tính giá theo size
     $multiplier = 1;
-    switch($size) {
+    switch($size['size']) {
         case 'M':
             $multiplier = 1.2;
             break;
@@ -29,7 +31,7 @@ if ($quantity <= $newProduct['amount']) {
     $newProduct['price'] = $newProduct['price'] * $multiplier;
     
     // Thêm thông tin size vào sản phẩm
-    $newProduct['size'] = $size;
+    $newProduct['size'] = $idsize;
     
     // Tính tổng giá topping
     $toppingPrice = 0;

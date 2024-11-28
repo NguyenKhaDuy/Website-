@@ -46,7 +46,14 @@ require "component/public/bradcaump.php";
                                                 <td class="product-price">
                                                     <span class="amount"><?php echo number_format($product['price']) ?> VNĐ</span>
                                                 </td>
-                                                <td class="product-size"><span><?php echo $product['size'] ?></span></td>
+                                                <td class="product-size">
+                                                    <span>
+                                                        <?php
+                                                        $size = getSizeId($product['size'])->fetch_assoc();
+                                                        echo $size['size'];
+                                                        ?>
+                                                    </span>
+                                                </td>
                                                 <td class="product-topping">
                                                     <?php if (!empty($product['toppings'])): ?>
                                                         <?php foreach ($product['toppings'] as $topping): ?>
@@ -88,7 +95,7 @@ require "component/public/bradcaump.php";
 
                             // Tính giảm giá dựa trên final_price
                             if (checkProductIsDiscounting($product['id'])) {
-                                $discounting += ($product['final_price'] * $product['qty']) * ($discounting_today['percent'] / 100);
+                                $discounting += ($product['price'] * $product['qty']) * ($discounting_today['percent'] / 100);
                             }
                         }
                     }
@@ -118,7 +125,9 @@ require "component/public/bradcaump.php";
                                         type: "GET",
                                         url: "action/get_cart_info.php",
                                         success: function(response) {
+                                            
                                             var data = JSON.parse(response);
+                                            console.log(data);
                                             // Cập nhật lại tổng tiền và giảm giá trong modal
                                             document.getElementById("total").innerText = data.total.toLocaleString('vi-VN') + " " + "VND";
                                             document.getElementById("discounting").innerText = data.discounting.toLocaleString('vi-VN') + " " + "VND";
@@ -189,7 +198,7 @@ require "component/public/bradcaump.php";
         </div>
         <!-- Modal Popup -->
         <div id="paymentModal" class="modal" style="align-items: center; justify-content: center; background-color: rgba(0, 0, 0, 0.8);">
-            <div class="modal-content" style="width: 50%; padding: 30px 30px; height: 80%; overflow-y: scroll;">
+            <div class="modal-content" style="width: 90%; padding: 30px 30px; height: 80%; overflow-y: scroll;">
                 <h2 style="text-align: center;">XÁC NHẬN THANH TOÁN</h2>
                 <label>Tên:</label>
                 <input type="text" id="name" style="width: 100%; padding: 10px; font-size: 16px; margin-bottom: 10px;" value="<?php echo $_SESSION['firstname'] . " " . $_SESSION['lastname']; ?>"><br>
@@ -201,8 +210,10 @@ require "component/public/bradcaump.php";
                     <thead>
                         <tr>
                             <th class="product-name"><span class="nobr">Tên sản phẩm</span></th>
+                            <th class="product-name"><span class="nobr">Size</span></th>
                             <th class="product-price"><span class="nobr"> Giá </span></th>
                             <th class="product-price"><span class="nobr"> Số lượng </span></th>
+                            <th class="product-name"><span class="nobr">Topping</span></th>
                             <th class="product-price"><span class="nobr"> Tổng </span></th>
                         </tr>
                     </thead>

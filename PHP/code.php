@@ -293,6 +293,26 @@ function getProductOdersDiscounting($idPackage)
     return $result;
 }
 
+function getProductOdersDiscounting1($idPackage)
+{
+    global $conn;
+    $sql = "SELECT iod.idOrder, iod.idDiscounting, iod.idProduct,iod.price, iod.qty, iod.idsize, odt.id_topping, odt.id FROM informationorder_discounting AS iod, orders_topping AS odt WHERE iod.idOrder = odt.idOrder AND iod.idOrder = $idPackage GROUP BY odt.id";
+
+    $result = $conn->query($sql);
+
+    return $result;
+}
+
+
+function getOderTopping1($idOrder, $id_product, $idtopping)
+{
+    global $conn;
+    $sql = "SELECT * FROM `orders_topping` WHERE idOrder = $idOrder AND id_product = $id_product AND id_topping = $idtopping";
+
+    $result = $conn->query($sql);
+
+    return $result;
+}
 
 function getOderTopping($idOrder, $id_product)
 {
@@ -358,6 +378,16 @@ function getAllProductToppingByIdGB($id)
 {
     global $conn;
     $sql = "SELECT * FROM `information_productstopping` WHERE id_product = $id GROUP BY id_product";
+
+    $result = $conn->query($sql);
+
+    return $result;
+}
+
+function getSizeId($id)
+{
+    global $conn;
+    $sql = "SELECT * FROM `size` WHERE idsize = $id";
 
     $result = $conn->query($sql);
 

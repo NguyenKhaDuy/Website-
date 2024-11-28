@@ -384,6 +384,7 @@ function getAllProductToppingByIdGB($id)
     return $result;
 }
 
+<<<<<<< HEAD
 function getSizeId($id)
 {
     global $conn;
@@ -393,3 +394,7 @@ function getSizeId($id)
 
     return $result;
 }
+=======
+//jguhuguhiujlk
+>>>>>>> 3e49ee444a86c51b08dfed2580a4e8cdfa7d5094
+

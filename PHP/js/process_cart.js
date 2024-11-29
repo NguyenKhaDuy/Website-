@@ -21,7 +21,6 @@ function update_cart(id, info) {
     data: { id: id, qty: info.value },
   }).done(function (response) {
     var data = JSON.parse(response);
-
     $("#total" + id).text(
       number_format(
         parseInt($("#price" + id).val()) * parseInt(info.value),
@@ -60,9 +59,11 @@ function updateModalProducts(products) {
 
   products.forEach(function (product) {
     var totalPrice = product.price * product.qty;
-    product.toppings.forEach(function (topping) {
-      totalPrice += topping.price * product.qty;
-    });
+    if (product.toppings != null) {
+      product.toppings.forEach(function (topping) {
+        totalPrice += topping.price * product.qty;
+      });
+    }
     // Start building the row HTML
     var row =
       "<tr>" +
@@ -79,14 +80,19 @@ function updateModalProducts(products) {
       product.qty +
       "</td>";
 
-    // Add all the toppings into one <td> in a single column
-    var toppingsHtml = product.toppings
-      .map(function (topping) {
-        return topping.name;
-      })
-      .join("<br>"); // Join toppings names with a comma and space
+    if (product.toppings != null) {
+      // Add all the toppings into one <td> in a single column
+      var toppingsHtml = product.toppings
+        .map(function (topping) {
+          return topping.name;
+        })
+        .join("<br>"); // Join toppings names with a comma and space
 
-    row += "<td>" + toppingsHtml + "</td>"; // Add all toppings in one cell
+      row += "<td>" + toppingsHtml + "</td>"; // Add all toppings in one cell
+    } else {
+       row += "<td>" + "Không có" + "</td>";
+    }
+    
 
     // Add the total
     row += "<td>" + number_format(totalPrice, 0, '', ',') + " VND</td>" + "</tr>";

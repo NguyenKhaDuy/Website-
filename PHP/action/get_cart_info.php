@@ -11,10 +11,12 @@ $discounting_today = getDiscountingToday()->fetch_assoc();
 
 foreach ($_SESSION['cart'] as $product) {
 
-    foreach($product['toppings'] as $topping){
-        $tongtopping += $topping['price'];
+    if($product['toppings'] != null){
+        foreach ($product['toppings'] as $topping) {
+            $tongtopping += $topping['price'];
+        }
     }
-
+    
     $total += $product['price'] * $product['qty'];
     $size = getSizeId($product['size'])->fetch_assoc();
     $discounting += checkProductIsDiscounting($product['id']) ? ($product['price'] * $product['qty']) * ($discounting_today['percent'] / 100) : 0;

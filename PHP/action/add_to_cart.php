@@ -11,12 +11,18 @@ $newProduct = getProductById($idProduct)->fetch_assoc();
 if (!isset($_SESSION['cart']) || $_SESSION['cart'] == null) {
     $_SESSION['cart'][$idProduct] = $newProduct;
     $_SESSION['cart'][$idProduct]['qty'] = 1;
+    $_SESSION['cart'][$idProduct]['size'] = 1;
+    $_SESSION['cart'][$idProduct]['toppings'] = null;
+    $_SESSION['cart'][$idProduct]['final_price'] = $_SESSION['cart'][$idProduct]['price'];
 } else {
     if (array_key_exists($idProduct, $_SESSION['cart'])) {
         $_SESSION['cart'][$idProduct]['qty'] += 1;
     } else {
         $_SESSION['cart'][$idProduct] = $newProduct;
         $_SESSION['cart'][$idProduct]['qty'] = 1;
+        $_SESSION['cart'][$idProduct]['size'] = 1;
+        $_SESSION['cart'][$idProduct]['toppings'] = null;
+        $_SESSION['cart'][$idProduct]['final_price'] = $_SESSION['cart'][$idProduct]['price'];
     }
 }
 $session->close();

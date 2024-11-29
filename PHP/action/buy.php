@@ -51,14 +51,19 @@ if (isset($_SESSION['idUser'])) {
         }
 
         $conn->query($sql);
-        //nếu nhiều topping thì sử dụng vòng lập ở đây 
-        foreach($product['toppings'] as $topping ){
-            $sqlTopping = "INSERT INTO `orders_topping`(`id_product`, `id_topping`, `idOrder`) VALUES ('{$product['id']}',$topping[id],'$last_id')";
-            $conn->query($sqlTopping);
-        }
-        unset($_SESSION['cart'][$value['id']]);
 
+        if($product['toppings'] != null){
+            //nếu nhiều topping thì sử dụng vòng lập ở đây 
+            foreach ($product['toppings'] as $topping) {
+                $sqlTopping = "INSERT INTO `orders_topping`(`id_product`, `id_topping`, `idOrder`) VALUES ('{$product['id']}',$topping[id],'$last_id')";
+                $conn->query($sqlTopping);
+            }
+        }
+        
     }
+
+    unset($_SESSION['cart']); // Xóa giỏ hàng
+
 
     // Lặp qua từng sản phẩm trong giỏ hàng và thêm vào bảng thông tin đơn hàng
     // foreach ($_SESSION['cart'] as $value) {

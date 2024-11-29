@@ -448,11 +448,13 @@ caption {
 th {
   font-weight: bold;
   text-transform: uppercase;
+  text-align: center;
 }
 
 td {
   border-top: 1px solid #ededed;
-  padding: 6px 10px 6px 0;
+  padding: 6px 10px 6px 10px;
+  text-align: center;
 }
 
 del {
@@ -7692,8 +7694,9 @@ h3.widget-title-modal {
   display: inline-block;
   font-size: 16px;
   font-weight: 600;
-  padding: 20px 0;
+  padding: 15px;
   text-transform: uppercase;
+  text-align: center;
 }
 
 .wnro__table tbody td.product-remove a {

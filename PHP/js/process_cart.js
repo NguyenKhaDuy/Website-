@@ -59,6 +59,10 @@ function updateModalProducts(products) {
   productTable.empty();
 
   products.forEach(function (product) {
+    var totalPrice = product.price * product.qty;
+    product.toppings.forEach(function (topping) {
+      totalPrice += topping.price * product.qty;
+    });
     // Start building the row HTML
     var row =
       "<tr>" +
@@ -69,7 +73,7 @@ function updateModalProducts(products) {
       product.size.size +
       "</td>" +
       "<td>" +
-      number_format(product.price) +
+      number_format(product.price, 0, "", ",") +
       " VND</td>" +
       "<td>" +
       product.qty +
@@ -85,7 +89,7 @@ function updateModalProducts(products) {
     row += "<td>" + toppingsHtml + "</td>"; // Add all toppings in one cell
 
     // Add the total
-    row += "<td>" + number_format(product.total) + " VND</td>" + "</tr>";
+    row += "<td>" + number_format(totalPrice, 0, '', ',') + " VND</td>" + "</tr>";
 
     // Append the row to the table
     productTable.append(row);

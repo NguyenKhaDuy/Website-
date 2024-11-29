@@ -17,7 +17,7 @@ require "component/public/bradcaump.php";
                             ?>
                                 <table>
                                     <thead>
-                                        <tr>
+                                        <tr class="cart-header-row">
                                             <th class="product-remove"></th>
                                             <th class="product-thumbnail"></th>
                                             <th class="product-name"><span class="nobr">Tên sản phẩm</span></th>
@@ -56,9 +56,12 @@ require "component/public/bradcaump.php";
                                                 </td>
                                                 <td class="product-topping">
                                                     <?php if (!empty($product['toppings'])): ?>
-                                                        <?php foreach ($product['toppings'] as $topping): ?>
-                                                            <div><?php echo $topping['name'] ?> (+<?php echo number_format($topping['price']) ?> VNĐ)</div>
-                                                        <?php endforeach; ?>
+                                                        <?php
+                                                        $toppingNames = array_map(function ($topping) {
+                                                            return $topping['name'];
+                                                        }, $product['toppings']);
+                                                        echo implode($toppingNames);
+                                                        ?>
                                                     <?php else: ?>
                                                         <span>Không có</span>
                                                     <?php endif; ?>
@@ -125,7 +128,7 @@ require "component/public/bradcaump.php";
                                         type: "GET",
                                         url: "action/get_cart_info.php",
                                         success: function(response) {
-                                            
+
                                             var data = JSON.parse(response);
                                             console.log(data);
                                             // Cập nhật lại tổng tiền và giảm giá trong modal

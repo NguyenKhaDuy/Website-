@@ -4,7 +4,7 @@ require "../database.php";
 require "../code.php";
 session_start();
 
-// Nhận dữ liệu từ AJAX
+// Nhận dữ liệu từ AJAXccc
 $cusName = $_POST['name'];
 $cusPhone = $_POST['phone'];
 $cusAddress = $_POST['address'];

@@ -138,13 +138,18 @@ function updatePrice() {
     let basePrice = parseFloat(document.getElementById('base-price').value);
     
     // Tính hệ số nhân theo size
-    let size = document.querySelector('input[name="size"]:checked').value;
+    let size = parseInt(
+      document.querySelector('input[name="size"]:checked').value
+    );
+    
+
+
     let multiplier = 1;
     switch(size) {
-        case 'M':
+        case 2:
             multiplier = 1.2;
             break;
-        case 'L':
+        case 3:
             multiplier = 1.4;
             break;
         default:
@@ -155,10 +160,10 @@ function updatePrice() {
     let newPrice = basePrice * multiplier;
     
     // Cộng thêm giá của các topping được chọn
-    const toppingCheckboxes = document.querySelectorAll('input[name="topping[]"]:checked');
-    toppingCheckboxes.forEach(checkbox => {
-        newPrice += parseFloat(checkbox.dataset.price);
-    });
+    // const toppingCheckboxes = document.querySelectorAll('input[name="topping[]"]:checked');
+    // toppingCheckboxes.forEach(checkbox => {
+    //     newPrice += parseFloat(checkbox.dataset.price);
+    // });
     
     // Làm tròn và hiển thị giá mới
     newPrice = Math.round(newPrice);

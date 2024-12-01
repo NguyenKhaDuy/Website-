@@ -12,11 +12,25 @@ $size = getSizeId($idsize)->fetch_assoc();
 
 // Lấy thông tin sản phẩm từ database
 $newProduct = getProductById($id)->fetch_assoc();
+// Kiểm tra tổng số lượng trong giỏ hàng
+$totalQuantityInCart = 0;
+if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $item) {
+        if ($item['id'] == $id) {
+            $totalQuantityInCart += $item['qty'];
+        }
+    }
+}
 
+// Kiểm tra nếu tổng số lượng (hiện có + thêm mới) vượt quá tồn kho
+if (($totalQuantityInCart + $quantity) > $newProduct['amount']) {
+    echo "0";
+    exit;
+}
 if ($quantity <= $newProduct['amount']) {
     // Tính giá theo size
     $multiplier = 1;
-    switch($size['size']) {
+    switch ($size['size']) {
         case 'M':
             $multiplier = 1.2;
             break;
@@ -26,13 +40,13 @@ if ($quantity <= $newProduct['amount']) {
         default:
             $multiplier = 1;
     }
-    
+
     // Cập nhật giá theo size
     $newProduct['price'] = $newProduct['price'] * $multiplier;
-    
+
     // Thêm thông tin size vào sản phẩm
     $newProduct['size'] = $idsize;
-    
+
     // Tính tổng giá topping
     $toppingPrice = 0;
     if (!empty($toppings)) {
@@ -44,7 +58,7 @@ if ($quantity <= $newProduct['amount']) {
             $stmt->execute();
             $result = $stmt->get_result();
             $toppingData = $result->fetch_assoc();
-            
+
             $toppingInfo[] = [
                 'id' => $toppingId,
                 'name' => $toppingData['nametopping'],
@@ -56,13 +70,13 @@ if ($quantity <= $newProduct['amount']) {
     } else {
         $newProduct['toppings'] = [];
     }
-    
+
     // Cập nhật giá cuối cùng (bao gồm size và topping)
     $newProduct['final_price'] = $newProduct['price'] + $toppingPrice;
-    
+
     // Tạo key duy nhất cho sản phẩm
     $cartKey = $id . '_' . $size . '_' . implode('_', $toppings);
-    
+
     if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
         $newProduct['qty'] = $quantity;
         $_SESSION['cart'][$cartKey] = $newProduct;
@@ -80,7 +94,7 @@ if ($quantity <= $newProduct['amount']) {
             $_SESSION['cart'][$cartKey] = $newProduct;
         }
     }
-    
+
     echo "1";
 } else {
     echo "0";

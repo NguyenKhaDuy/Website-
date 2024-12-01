@@ -60,7 +60,7 @@ require "component/public/bradcaump.php";
                                                         $toppingNames = array_map(function ($topping) {
                                                             return $topping['name'];
                                                         }, $product['toppings']);
-                                                        echo implode('<br>', $toppingNames);
+                                                        echo implode('<br>+</br>', $toppingNames);
                                                         ?>
                                                     <?php else: ?>
                                                         <span>Không có</span>

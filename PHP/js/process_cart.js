@@ -20,37 +20,42 @@ function update_cart(id, info) {
     url: "action/update_cart.php",
     data: { id: id, qty: info.value },
   }).done(function (response) {
-    var data = JSON.parse(response);
-    $("#total" + id).text(
-      number_format(
-        parseInt($("#price" + id).val()) * parseInt(info.value),
-        0,
-        ""
-      ) + " VND"
-    );
+    if (response == 1) {
+      alert("Số lượng vượt mức số lượng tồn kho!");
+      document.getElementById('inputAmount').value = 1;
+    } else {
+      var data = JSON.parse(response);
+      $("#total" + id).text(
+        number_format(
+          parseInt($("#price" + id).val()) * parseInt(info.value),
+          0,
+          ""
+        ) + " VND"
+      );
 
-    updateModalCartInfo(data.total, data.discounting);
-    $.ajax({
-      type: "GET",
-      url: "action/updateBoxPackage.php",
-      success: function (boxPackageData) {
-        console.log("Dữ liệu box_package nhận được:", boxPackageData);
-        console.log("sdsdsdsdsd");
-        if (boxPackageData) {
-          $("#box_package").html(boxPackageData);
-        } else {
-          console.log("Dữ liệu box_package không hợp lệ.");
-        }
-      },
-      error: function () {
-        console.log("Có lỗi xảy ra khi cập nhật box_package.");
-      },
-    });
+      updateModalCartInfo(data.total, data.discounting);
+      $.ajax({
+        type: "GET",
+        url: "action/updateBoxPackage.php",
+        success: function (boxPackageData) {
+          // console.log("Dữ liệu box_package nhận được:", boxPackageData);
+          // console.log("sdsdsdsdsd");
+          if (boxPackageData) {
+            $("#box_package").html(boxPackageData);
+          } else {
+            console.log("Dữ liệu box_package không hợp lệ.");
+          }
+        },
+        error: function () {
+          console.log("Có lỗi xảy ra khi cập nhật box_package.");
+        },
+      });
+    }
   });
 }
 
 function updateModalCartInfo(total, discounting) {
-  console.log(total + " " + discounting);
+  // console.log(total + " " + discounting);
 }
 
 function updateModalProducts(products) {
@@ -90,12 +95,12 @@ function updateModalProducts(products) {
 
       row += "<td>" + toppingsHtml + "</td>"; // Add all toppings in one cell
     } else {
-       row += "<td>" + "Không có" + "</td>";
+      row += "<td>" + "Không có" + "</td>";
     }
-    
 
     // Add the total
-    row += "<td>" + number_format(totalPrice, 0, '', ',') + " VND</td>" + "</tr>";
+    row +=
+      "<td>" + number_format(totalPrice, 0, "", ",") + " VND</td>" + "</tr>";
 
     // Append the row to the table
     productTable.append(row);

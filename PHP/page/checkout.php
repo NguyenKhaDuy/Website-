@@ -66,7 +66,7 @@ require "component/public/bradcaump.php";
                                                         <span>Không có</span>
                                                     <?php endif; ?>
                                                 </td>
-                                                <td class="product-quantity"><input class="form-control" style="width:80px" onclick="update_cart('<?php echo $cartKey ?>',this)" onchange="update_cart('<?php echo $product['id'] ?>',this)" min=1 type="number" value="<?php echo $product['qty'] ?>" /></td>
+                                                <td class="product-quantity"><input id="inputAmount" class="form-control" style="width:80px" onclick="update_cart('<?php echo $cartKey ?>',this)" onchange="update_cart('<?php echo $product['id'] ?>',this)" min=1 type="number" value="<?php echo $product['qty'] ?>" /></td>
                                                 <td class="product-subtotal"><span id="total<?php echo $product['id'] ?>"><?php echo number_format($product['final_price'] * $product['qty']) ?> VNĐ</span></td>
                                                 <td class="product-discount"><span class="wishlist-in-stock"><?php if (checkProductIsDiscounting($product['id'])) echo $discounting_today['percent'];
                                                                                                                 else echo 0.0 ?>%</span></td>

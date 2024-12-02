@@ -89,14 +89,15 @@
                     <?php
                     $result = getAllProductToppingNoNumpage();
                     $numpage = ceil($result->num_rows / 7);
-                    for ($i = 1; $i <= $numpage; $i++) {
-                        $pos = ($i - 1) * 7;
+                    if ($numpage > 0)
+                        for ($i = 1; $i <= $numpage; $i++) {
+                            $pos = ($i - 1) * 7;
                     ?>
                         <li class="page-item <?php if ($i == 1) echo "active" ?>">
                             <button class="page-link" type="button" onclick="getProductTopping(<?php echo $pos ?>,<?php echo $i ?>)"><?php echo $i ?></button>
                         </li>
                     <?php
-                    } ?>
+                        } ?>
                 </ul>
             </nav>
         </div>

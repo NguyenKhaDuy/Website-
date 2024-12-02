@@ -95,7 +95,10 @@ function addNewTopping() {
     success: function (data) {
       //xem lại vị trí trang hiện tại
       var x = document.querySelectorAll("#pagination li.active")[0];
-      getPaginationTopping(parseInt(x.textContent));
+      if (x != undefined) {
+        getPaginationTopping(parseInt(x.textContent));
+      }
+
       // bỏ dữ liệu vào trong bảng mới thôi
       if (document.getElementsByTagName("tr").length != 8) {
         $.ajax({
@@ -180,7 +183,7 @@ $(document).ready(function () {
 
 function updateRowProductTopping() {
   let id = document.forms.formUpdateProductTopping.id.value;
-  console.log(document.getElementById("tr"+id));
+  console.log(document.getElementById("tr" + id));
   $.ajax({
     type: "GET",
     url: "action/getOneRowAfterUpdateProductTopping.php",
@@ -266,13 +269,13 @@ function deleteProductTopping(id) {
     });
 }
 
-var id;
+var id = 1;
 document.getElementById("select").addEventListener("change", function () {
   var selectedValue = this.value;
   var selectedText = this.options[this.selectedIndex].text;
   id = selectedValue;
+  console.log(id);
 });
-
 
 //Hàm thêm topping mới vào cơ sở dữ liệu
 function addNewProductTopping() {
@@ -293,13 +296,15 @@ function addNewProductTopping() {
     success: function (data) {
       //xem lại vị trí trang hiện tại
       var x = document.querySelectorAll("#pagination li.active")[0];
-      getPaginationProductTopping(parseInt(x.textContent));
+      if (x != undefined) {
+        getPaginationProductTopping(parseInt(x.textContent));
+      }
       // bỏ dữ liệu vào trong bảng mới thôi
       if (document.getElementsByTagName("tr").length != 8) {
         $.ajax({
           type: "GET",
           url: "action/updateNewProductTopping.php",
-          data: {idProduct: id},
+          data: { idProduct: id },
         }).done(function (data) {
           $("#table_case").append(data);
         });

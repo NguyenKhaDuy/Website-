@@ -2,7 +2,7 @@
 require "../../PHP/database.php";
 require "../../PHP/code.php";
 $id = $_GET['idProduct'];
-$result = getProductToppingById($id);
+$result = getAllProductToppingByIdGB($id);
 while ($row = $result->fetch_assoc()) {
     $product = getProductById($row['id_product'])->fetch_assoc();
     $result1 = getProductToppingById($row['id_product']);
